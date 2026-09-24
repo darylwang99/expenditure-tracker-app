@@ -17,6 +17,7 @@ const RECEIPT_MAX_DIMENSION = 1000;
 const RECEIPT_JPEG_QUALITY = 0.7;
 const RECEIPT_MAX_BYTES = 400 * 1024;
 const SOFT_STORAGE_WARN_BYTES = 4.5 * 1024 * 1024;
+const BACKUP_MAX_BYTES = 20 * 1024 * 1024;
 
 const PAYMENT_METHODS = ["Cash", "Debit Card", "Credit Card", "Bank Transfer", "Other"];
 
@@ -90,7 +91,13 @@ function strToCents(str) {
 }
 
 function csvEscape(field) {
-  const str = String(field ?? "");
+  let str = String(field ?? "");
+  // Neutralize CSV/formula injection: a leading =, +, -, or @ is interpreted as a
+  // formula by Excel/Google Sheets when the file is opened, which can execute
+  // arbitrary commands via DDE. Prefixing with an apostrophe forces plain text.
+  if (/^[=+\-@]/.test(str)) {
+    str = "'" + str;
+  }
   if (/[",\n\r]/.test(str)) {
     return `"${str.replace(/"/g, '""')}"`;
   }

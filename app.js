@@ -992,6 +992,10 @@ restoreFileInput.addEventListener("change", async () => {
   const file = restoreFileInput.files[0];
   restoreFileInput.value = "";
   if (!file) return;
+  if (file.size > BACKUP_MAX_BYTES) {
+    showToast("That backup file is too large");
+    return;
+  }
 
   let parsed;
   try {

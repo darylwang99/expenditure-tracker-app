@@ -2,6 +2,13 @@
 
 This documents how the app was planned and built, for anyone picking up the project later.
 
+## Maintenance: updating the vendored pdf.js
+
+`pdf.min.js`/`pdf.worker.min.js` are a one-time download (currently pdf.js 6.3.289) converted to classic-script form — see the "The `file://` module wall" section under Phase 3 below for exactly what that conversion does and why. There is no automatic update mechanism, and since the app now runs untrusted, user-uploaded PDFs through this parser, it's worth periodically checking https://github.com/mozilla/pdf.js/security/advisories (or just the releases page) for fixes, and re-vendoring when one ships:
+1. Download the new version's `legacy-dist.zip` from the GitHub release assets and extract `build/pdf.mjs` and `build/pdf.worker.mjs`.
+2. Re-run the same conversion: replace `import.meta.url` occurrences with `""` (only appears in dead Node.js-only code paths), rewrite the trailing `export { ... };` in `pdf.mjs` to `window.pdfjsLib = { ... };`, drop the trailing export in `pdf.worker.mjs` entirely (it already assigns `globalThis.pdfjsWorker = { WorkerMessageHandler }` itself), then wrap the converted `pdf.mjs` content in `(function () { ... })();` to keep its internals from colliding with the app's own global scope (this is what caught the `SVG_NS` collision with `charts.js` during initial vendoring).
+3. Test exactly as described in Phase 3's verification section before replacing the committed files.
+
 ## Starting point
 
 The `Expenditure Tracker/` folder existed as a sibling to the `ToDo/` app inside the `CC_Workspace` git repo, containing only a one-line, unfinished `specs.md` stub ("Plan for a Expenditure tracker app / Specifications / 1. Do "). The request was: an app to log expenses (amount, date, category, payment method, optional receipt), a dashboard (monthly totals, category breakdown chart, budget-vs-actual per category), date-range/category filters, and CSV export.
