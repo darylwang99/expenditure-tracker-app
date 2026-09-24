@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f6">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'">
+  <title>Expenditure Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Expenditure Tracker</h1>
+      <button id="theme-toggle" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">&#127769;</button>
+    </header>
+
+    <section id="dashboard" aria-label="Dashboard">
+      <div class="dashboard-month-nav">
+        <button id="month-prev" type="button" aria-label="Previous month">&#8249;</button>
+        <span id="month-label"></span>
+        <button id="month-next" type="button" aria-label="Next month">&#8250;</button>
+      </div>
+
+      <div class="stat-tile">
+        <div id="stat-total" class="stat-amount">$0.00</div>
+        <div class="stat-caption">total spent this month</div>
+        <div id="stat-delta" class="stat-delta"></div>
+      </div>
+
+      <div class="dashboard-block">
+        <h2>Trend (6 months)</h2>
+        <div id="trend-chart-container"></div>
+      </div>
+
+      <div class="dashboard-block">
+        <div class="dashboard-block-header">
+          <h2>By category</h2>
+          <button id="chart-view-toggle" type="button">View as table</button>
+        </div>
+        <div id="category-chart-container"></div>
+        <div id="category-table-container" hidden></div>
+      </div>
+
+      <div class="dashboard-block">
+        <h2>Budgets</h2>
+        <div id="budget-meters-container"></div>
+      </div>
+    </section>
+
+    <details id="manage-panel">
+      <summary>Manage categories &amp; budgets</summary>
+      <div id="category-budget-list"></div>
+      <form id="add-category-form">
+        <input id="category-name-input" type="text" placeholder="New category name" maxlength="40" autocomplete="off">
+        <button type="submit">Add category</button>
+      </form>
+      <label class="currency-field">
+        Currency code
+        <input id="currency-input" type="text" maxlength="3" autocomplete="off" placeholder="USD">
+      </label>
+    </details>
+
+    <details id="recurring-panel">
+      <summary>Recurring expenses</summary>
+      <div id="recurring-list"></div>
+      <form id="add-recurring-form">
+        <input id="recurring-amount-input" type="number" step="0.01" min="0.01" placeholder="Amount" required inputmode="decimal">
+        <select id="recurring-category-input" title="Category"></select>
+        <select id="recurring-payment-input" title="Payment method"></select>
+        <input id="recurring-day-input" type="number" min="1" max="31" placeholder="Day of month" title="Day of month (1-31)" required>
+        <input id="recurring-note-input" type="text" placeholder="Note (optional)" maxlength="2000" autocomplete="off">
+        <button type="submit">Add recurring expense</button>
+      </form>
+    </details>
+
+    <form id="add-form">
+      <input id="amount-input" type="number" step="0.01" min="0.01" placeholder="Amount" required inputmode="decimal">
+      <input id="date-input" type="date" required>
+      <select id="category-input" title="Category"></select>
+      <select id="payment-input" title="Payment method"></select>
+      <button type="submit">Add</button>
+      <textarea id="note-input" rows="2" placeholder="Note (optional)" maxlength="2000"></textarea>
+      <label class="receipt-field">
+        Receipt (optional)
+        <input id="receipt-input" type="file" accept="image/*">
+      </label>
+      <div id="receipt-preview" hidden>
+        <img id="receipt-preview-img" alt="Receipt preview">
+        <button id="receipt-remove" type="button">Remove</button>
+      </div>
+    </form>
+
+    <input id="search" type="search" placeholder="Search notes, category, payment method" aria-label="Search expenses" autocomplete="off">
+
+    <div class="controls">
+      <input id="date-from" type="date" title="From date" aria-label="From date">
+      <input id="date-to" type="date" title="To date" aria-label="To date">
+      <select id="category-filter" title="Filter by category" aria-label="Filter by category">
+        <option value="all">All categories</option>
+      </select>
+      <select id="sort" title="Sort" aria-label="Sort">
+        <option value="date-desc">Sort: newest first</option>
+        <option value="date-asc">Sort: oldest first</option>
+        <option value="amount-desc">Sort: amount high to low</option>
+        <option value="amount-asc">Sort: amount low to high</option>
+      </select>
+    </div>
+
+    <ul id="list"></ul>
+
+    <footer>
+      <span id="count"></span>
+      <div class="footer-actions">
+        <button id="export" type="button" title="Export filtered expenses as CSV">Export CSV</button>
+        <button id="backup" type="button" title="Download a full backup file (expenses, categories, budgets)">Backup</button>
+        <button id="restore" type="button" title="Restore from a backup file">Restore</button>
+      </div>
+      <input id="restore-file" type="file" accept="application/json,.json" hidden>
+    </footer>
+
+    <div id="toast" role="status" hidden>
+      <span id="toast-msg"></span>
+      <button id="undo" type="button">Undo</button>
+    </div>
+  </main>
+  <script src="storage.js"></script>
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
