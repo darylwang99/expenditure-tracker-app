@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f4f4f6">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; worker-src 'self'; frame-ancestors 'none'">
   <title>Expenditure Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -74,6 +74,21 @@
       </form>
     </details>
 
+    <details id="import-panel">
+      <summary>Import bank statement</summary>
+      <p class="import-note">Reads a PDF bank statement (tuned for DBS-style layouts) entirely in your browser &mdash; nothing is uploaded anywhere. Requires the app to be served over http/https (works on the deployed site; not from a double-clicked local file).</p>
+      <label class="statement-file-field">
+        <input id="statement-file-input" type="file" accept="application/pdf">
+      </label>
+      <p id="statement-status"></p>
+      <div id="statement-review-container"></div>
+      <div id="statement-review-actions" hidden>
+        <button id="statement-select-all-btn" type="button">Select all</button>
+        <button id="statement-select-none-btn" type="button">Select none</button>
+        <button id="statement-import-btn" type="button">Import selected</button>
+      </div>
+    </details>
+
     <form id="add-form">
       <input id="amount-input" type="number" step="0.01" min="0.01" placeholder="Amount" required inputmode="decimal">
       <input id="date-input" type="date" required>
@@ -127,5 +142,7 @@
   <script src="storage.js"></script>
   <script src="charts.js"></script>
   <script src="app.js"></script>
+  <script src="pdf.min.js"></script>
+  <script src="statement-import.js"></script>
 </body>
 </html>

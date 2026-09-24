@@ -150,6 +150,22 @@ textarea { font: inherit; padding: 8px; border: 1px solid var(--input-border); b
 #add-recurring-form button[type="submit"] { flex: 1 1 100%; }
 .recurring-empty { color: var(--muted); font-size: .9em; padding: 8px 0; }
 
+/* Import bank statement */
+#import-panel { margin-top: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+#import-panel summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.import-note { color: var(--muted); font-size: .85em; margin: 8px 0; }
+.statement-file-field { display: block; margin: 8px 0; }
+#statement-status { color: var(--muted); font-size: .9em; margin: 8px 0; }
+#statement-review-container table { width: 100%; border-collapse: collapse; font-size: .85em; }
+#statement-review-container th, #statement-review-container td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+#statement-review-container td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#statement-review-container .deposit-amount { color: var(--status-good); }
+#statement-review-container .desc-cell { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#statement-review-container select { padding: 4px; font-size: .95em; }
+#statement-review-container tr.self-transfer { opacity: .7; }
+#statement-review-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+#statement-review-actions button { flex: 1 1 auto; }
+
 /* Add expense form */
 #add-form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 #amount-input { flex: 1 1 120px; min-width: 0; }
